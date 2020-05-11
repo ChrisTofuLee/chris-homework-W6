@@ -87,8 +87,8 @@ function searchFunction(event) {
   }
   
   $.ajax({
-      url: weatherURL,
-      method: "GET",
+      url:weatherURL,
+      method:"GET",
   }).then(parseCurrentWeather).catch(errorFunction)
  
 }
