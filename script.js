@@ -1,8 +1,6 @@
 const searchSection = $("#previousSearchSection");
-let queryCity = "manchester";
-const siteKey = "166a433c57516f51dfab1f7edaed8413";
-const weatherURL =
-  "api.openweathermap.org/data/2.5/weather?q=" + queryCity + "&appid="
+
+
 
   let today = new Date();
   const dd = String(today.getDate()).padStart(2, '0');
@@ -62,21 +60,26 @@ const mockData = {
 
 function searchFunction(event) {
   event.preventDefault();
+  const queryCity = $("#cityInput").val().trim();
+  const weatherURL =
+  "api.openweathermap.org/data/2.5/weather?q=" + queryCity + "&appid=166a433c57516f51dfab1f7edaed8413"
   console.log("click");
+  console.log("input" + queryCity)
   
-  function parseCurrentWeather(ajaxData) {
-  iconCode = mockData.weather[0].icon
+  function parseCurrentWeather(data) {
+    console.log(data)
+  iconCode = data.weather[0].icon
   const iconURL = "http://openweathermap.org/img/w/" + iconCode + ".png";
-    $(".cityDateIconArea").text(mockData.name + " (" + today + ") " )
+    $(".cityDateIconArea").text(data.name + " (" + today + ") " )
     $("#weatherIcon").attr('src', iconURL)
 
-    const tempConverter = mockData.main.temp - 273.15
+    const tempConverter = data.main.temp - 273.15
     let tempToDisplay = tempConverter.toFixed(2);
 
     $(".temperatureArea").text("Temperature: " + (tempToDisplay) + " ℃")
 
-    $(".humidityArea").text("Humidty: " + mockData.main.humidity + "%")
-    const windConverter = mockData.wind.speed * 2.237
+    $(".humidityArea").text("Humidty: " + data.main.humidity + "%")
+    const windConverter = data.wind.speed * 2.237
     const windToDisplay = windConverter.toFixed(1);
     $(".windSpeedArea").text("Wind Speed: " + windToDisplay + "MPH")
 
