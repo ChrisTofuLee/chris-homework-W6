@@ -240,3 +240,4 @@ $(document).ready(function () {
     });
   }
 });
+// edit code to allow previously searched destinations appear on the page even after refreshing

@@ -1,3 +1,12 @@
+# Weather Forecast Dashboard
+
+For this application, the user has requested for a weather forecast dashboard that will search a destination the user has entered and return the current day's weather along with a forecast for the following 5 days. The user will also be able to click on previously searched destinations to bring back up to date weather information.
+
+## Functionality
+- When the user searches a valid destination (city, country, county etc), the user is presented with 
+
+
+
 # 06 Server-Side APIs: Weather Dashboard
 
 Developers are often tasked with retrieving data from another application's API and using it in the context of their own. Third-party APIs allow developers to access their data and functionality by making requests with specific parameters to a URL. Your challenge is to build a weather dashboard that will run in the browser and feature dynamically updated HTML and CSS.
