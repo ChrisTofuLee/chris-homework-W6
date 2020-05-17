@@ -45,25 +45,26 @@ $(document).ready(function () {
         method: "GET",
       })
         .then(parseHistoryWeather)
-
+      fiveDay(inputElement)
+      getUvForSearchedCity(data.coord.lat, data.coord.lon);
   });
 
-  
+
   function fiveDay(searchedCity) {
     const inputElement = $("#cityInput");
     const queryCity = inputElement.val().trim();
-    const weatherURL =
-      "https://api.openweathermap.org/data/2.5/weather?q=" +
-      queryCity +
+    const forecastURL =
+      "http://api.openweathermap.org/data/2.5/forecast?q=" +
+      searchedCity +
       "&appid=24aa678b0a0e5d95e08705ab2cbadb31";
-
+    
     $.ajax({
-      url: weatherURL,
+      url: forecastURL,
       method: "GET",
     }).then(parseForecast);
 
     function parseForecast(data) {
-      $(".fiveDateArea").html("");
+      $(".forecastArea").html("");
 
       const list = data.list;
       let todayNew = new Date();
@@ -79,21 +80,17 @@ $(document).ready(function () {
         const splitDate = splitter[0];
         const splitTime = splitter[1];
 
-        if (splitDate != todayNew) {
-          console.log("first if" + splitDate);
-          if ((splitTime = "12:00:00")) {
-            console.log("12 time");
+        if (splitDate != todayNew && splitTime === "12:00:00") {
             const dateConversion = "";
             let dateDivide = splitDate.split("-");
             const dmyDate =
               dateDivide[2] + "/" + dateDivide[1] + "/" + dateDivide[0];
-            console.log(splitDate + splitTime);
-
+            console.log(dmyDate)
             const cardDiv = $("<div>")
               .addClass("card text-white bg-info mb-3 mr-4")
-              .attr("style", "max-width: 14rem;");
+              .attr("style", "max-width: 15rem;");
             const dateDiv = $("<div>")
-              .addClass("card-header h5 fiveDateArea")
+              .addClass("card-header font-weight-bold")
               .text(dmyDate);
             const bodyDiv = $("<div>").addClass("card-body");
 
@@ -101,7 +98,7 @@ $(document).ready(function () {
             const iconURL =
               "http://openweathermap.org/img/w/" + iconCode + ".png";
             const iconDiv = $("<img>")
-              .addClass("card-text py-3 fiveIconArea")
+              .addClass("card-text py-2 fiveIconArea")
               .attr("src", iconURL);
 
             const tempConverter = index.main.temp - 273.15;
@@ -113,11 +110,12 @@ $(document).ready(function () {
             const humidity = index.main.humidity;
             const humidityDiv = $("<p>")
               .addClass("card-text fiveHumidArea")
-              .text("humidity: " + humidity + "%");
+              .text("Humidity: " + humidity + "%");
             $(".forecastArea").append(cardDiv);
+            $(cardDiv).append(dateDiv);
             $(cardDiv).append(bodyDiv);
             $(bodyDiv).append(iconDiv, tempDiv, humidityDiv);
-          }
+          
         }
         console.log("test" + splitDate);
       });
@@ -129,7 +127,7 @@ $(document).ready(function () {
 
   function searchFunction(event) {
     event.preventDefault();
-    fiveDay(event);
+
 
     //create genericAPIFetch function to create the seperate apis
 
@@ -140,7 +138,11 @@ $(document).ready(function () {
       queryCity +
       "&appid=24aa678b0a0e5d95e08705ab2cbadb31";
 
-    localStorageArray.push(queryCity);
+      
+      const searchedCity = queryCity
+      fiveDay(queryCity);
+
+    localStorageArray.unshift(queryCity);
     localStorage.setItem("cityStorage", localStorageArray);
     // localStorage.setItem(city, queryCity);
     function parseCurrentWeather(data) {
@@ -164,50 +166,11 @@ $(document).ready(function () {
       getUvForSearchedCity(data.coord.lat, data.coord.lon);
     }
 
-    function getUvForSearchedCity(latitude, longitude) {
-      $.ajax({
-        type: "GET",
-        url:
-          "https://api.openweathermap.org/data/2.5/uvi?&appid=24aa678b0a0e5d95e08705ab2cbadb31&lat=" +
-          latitude +
-          "&lon=" +
-          longitude,
-        datatype: "json",
-        success: function (data) {
-          console.log(data.value);
-          const uvIndex = data.value;
-
-          if (uvIndex > 5.99) {
-            $(".uvIndexArea").text("UV Index: ");
-            const span = $("<span>")
-              .attr("class", "badge badge-danger")
-              .text(uvIndex);
-            $(".uvIndexArea").append(span);
-            console.log("high");
-          }
-          if (uvIndex > 5 && uvIndex < 6) {
-            $(".uvIndexArea").text("UV Index: ");
-            const span = $("<span>")
-              .attr("class", "badge badge-success")
-              .text(uvIndex);
-            $(".uvIndexArea").append(span);
-            console.log("mid");
-          }
-          if (uvIndex < 4.99) {
-            $(".uvIndexArea").text("UV Index: ");
-            const span = $("<span>")
-              .attr("class", "badge badge-warning")
-              .text(uvIndex);
-            $(".uvIndexArea").append(span);
-            console.log("low");
-          }
-        },
-        error: function (error) {},
-      });
-    }
+    
 
     function currentWeatherError() {
-      console.log("failed ajax");
+    
+      alert("Please enter valid city, town, or country")
     }
 
     $.ajax({
@@ -234,5 +197,46 @@ $(document).ready(function () {
         $(".historySearch").append(searchList);
       } //change the searchlink append to running the function
     }
+  }
+  function getUvForSearchedCity(latitude, longitude) {
+    $.ajax({
+      type: "GET",
+      url:
+        "https://api.openweathermap.org/data/2.5/uvi?&appid=24aa678b0a0e5d95e08705ab2cbadb31&lat=" +
+        latitude +
+        "&lon=" +
+        longitude,
+      datatype: "json",
+      success: function (data) {
+        console.log(data.value);
+        const uvIndex = data.value;
+
+        if (uvIndex > 5.99) {
+          $(".uvIndexArea").text("UV Index: ");
+          const span = $("<span>")
+            .attr("class", "badge badge-danger")
+            .text(uvIndex);
+          $(".uvIndexArea").append(span);
+          console.log("high");
+        }
+        if (uvIndex > 5 && uvIndex < 6) {
+          $(".uvIndexArea").text("UV Index: ");
+          const span = $("<span>")
+            .attr("class", "badge badge-success")
+            .text(uvIndex);
+          $(".uvIndexArea").append(span);
+          console.log("mid");
+        }
+        if (uvIndex < 4.99) {
+          $(".uvIndexArea").text("UV Index: ");
+          const span = $("<span>")
+            .attr("class", "badge badge-warning")
+            .text(uvIndex);
+          $(".uvIndexArea").append(span);
+          console.log("low");
+        }
+      },
+      error: function (error) {},
+    });
   }
 });
