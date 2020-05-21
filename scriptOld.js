@@ -23,7 +23,7 @@ $(document).ready(function () {
       function parseHistoryWeather(data) {
         //   console.log(data);
         iconCode = data.weather[0].icon;
-        const iconURL = "http://openweathermap.org/img/w/" + iconCode + ".png";
+        const iconURL = "https://openweathermap.org/img/w/" + iconCode + ".png";
   
         $(".cityDateIconArea").text(data.name + " (" + today + ") ");
         $("#weatherIcon").attr("src", iconURL);
@@ -54,7 +54,7 @@ $(document).ready(function () {
     const inputElement = $("#cityInput");
     const queryCity = inputElement.val().trim();
     const forecastURL =
-      "http://api.openweathermap.org/data/2.5/forecast?q=" +
+      "https://api.openweathermap.org/data/2.5/forecast?q=" +
       searchedCity +
       "&appid=24aa678b0a0e5d95e08705ab2cbadb31";
     
@@ -96,7 +96,7 @@ $(document).ready(function () {
 
             iconCode = index.weather[0].icon;
             const iconURL =
-              "http://openweathermap.org/img/w/" + iconCode + ".png";
+              "https://openweathermap.org/img/w/" + iconCode + ".png";
             const iconDiv = $("<img>")
               .addClass("card-text py-2 fiveIconArea")
               .attr("src", iconURL);
@@ -148,7 +148,7 @@ $(document).ready(function () {
     function parseCurrentWeather(data) {
       //   console.log(data);
       iconCode = data.weather[0].icon;
-      const iconURL = "http://openweathermap.org/img/w/" + iconCode + ".png";
+      const iconURL = "https://openweathermap.org/img/w/" + iconCode + ".png";
 
       $(".cityDateIconArea").text(data.name + " (" + today + ") ");
       $("#weatherIcon").attr("src", iconURL);
