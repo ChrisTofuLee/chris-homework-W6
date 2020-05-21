@@ -129,7 +129,7 @@ $(document).ready(function () {
     event.preventDefault();
 
 
-    //create genericAPIFetch function to create the seperate apis
+    //create genericAPIFetch function to create the separate apis
 
     const inputElement = $("#cityInput");
     const queryCity = inputElement.val().trim();
